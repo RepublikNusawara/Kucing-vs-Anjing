@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 34 · 23 Nov 06:05</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 35 · 23 Nov 06:15</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -362,10 +362,10 @@ litMats.forEach(m=>m.emissiveIntensity=.2+.65*(1-df));clouds.forEach(c=>c.childr
 updTime();setInterval(updTime,30000);
 /* kamera (kontrol seperti peta Nusawara: MapControls) */
 const VIEWS={depan:[0,1.08,790],jam3:[Math.PI/2,1.0,330],jam9:[-Math.PI/2,1.0,330],belakang:[Math.PI,1.0,360],atas:[0,.2,480]};
-const target=new THREE.Vector3(0,10,-100);const TGT0=target.clone();
+const target=new THREE.Vector3(0,4,-100);const TGT0=target.clone();
 const sph=(v,tg)=>{const [a,b,c]=VIEWS[v];return new THREE.Vector3(tg.x+c*Math.sin(b)*Math.sin(a),tg.y+c*Math.cos(b),tg.z+c*Math.sin(b)*Math.cos(a));};
 cam.position.copy(sph('depan',target));
-const ctl=new THREE.MapControls(cam,r.domElement);ctl.target.copy(target);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.screenSpacePanning=false;ctl.minDistance=14;ctl.maxDistance=1200;ctl.maxPolarAngle=1.45;ctl.zoomSpeed=1;ctl.rotateSpeed=.6;ctl.panSpeed=1;ctl.autoRotateSpeed=.6;
+const ctl=new THREE.MapControls(cam,r.domElement);ctl.target.copy(target);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.screenSpacePanning=false;ctl.minDistance=3;ctl.maxDistance=1200;ctl.minPolarAngle=0;ctl.maxPolarAngle=Math.PI/2+.12;ctl.zoomSpeed=1;ctl.rotateSpeed=.6;ctl.panSpeed=1;ctl.autoRotateSpeed=.6;
 ctl.touches={ONE:THREE.TOUCH.PAN,TWO:THREE.TOUCH.DOLLY_ROTATE};ctl.mouseButtons={LEFT:THREE.MOUSE.PAN,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.ROTATE};ctl.update();
 let fly=null;
 function setView(v){fly={p0:cam.position.clone(),t0:ctl.target.clone(),p1:sph(v,TGT0),t1:TGT0.clone(),s:performance.now()};document.querySelectorAll('#bar button[data-v]').forEach(btn=>btn.classList.toggle('on',btn.dataset.v===v));}
@@ -378,7 +378,7 @@ if(fly){const k=Math.min(1,(performance.now()-fly.s)/1200),e=k*k*(3-2*k);cam.pos
 if(!sweep){ctl.update();const d=Math.hypot(ctl.target.x,ctl.target.z);if(d>650){const f=650/d,ox=ctl.target.x*(1-f),oz=ctl.target.z*(1-f);ctl.target.x-=ox;ctl.target.z-=oz;cam.position.x-=ox;cam.position.z-=oz;}}
 else{const u=t-sweep.t0;if(u>18.5){sweep=null;cam.position.copy(saved.p);ctl.target.copy(saved.t);ctl.enabled=true;ctl.update();}else{const s=u<9.25?-1:1,k=Math.min(1,(u%9.25)/8.5),e=k*k*(3-2*k);const ce=(window['CE'+(s<0?0:1)]||360)-40,x=s*(15+e*ce);cam.position.set(x,70,OZ+110);cam.lookAt(x+s*110,8,OZ);}}
 {const lp=new THREE.Vector3();cam.getWorldDirection(lp);const tx=cam.position.x+lp.x*300,tz=cam.position.z+lp.z*300,ty=cam.position.y+lp.y*300;const gh=(x,z)=>Math.max(TH(x,z),VY+95-Math.hypot(x-VOX,z-VOZ)*1.64);let need=0;
-for(let k=0;k<20;k++){const f=k/20,px=cam.position.x+(tx-cam.position.x)*f,pz=cam.position.z+(tz-cam.position.z)*f,py=cam.position.y+(ty-cam.position.y)*f;const g=gh(px,pz)+14-py;if(g>0)need=Math.max(need,g/Math.max(.15,1-f));}
+for(let k=0;k<20;k++){const f=k/20,px=cam.position.x+(tx-cam.position.x)*f,pz=cam.position.z+(tz-cam.position.z)*f,py=cam.position.y+(ty-cam.position.y)*f;const g=gh(px,pz)+1.2-py;if(g>0)need=Math.max(need,g/Math.max(.15,1-f));}
 lift+=(need-lift)*.12;clouds.forEach(c=>{c.visible=c.position.distanceTo(cam.position)>320;});}
 lights.forEach(([l,f])=>{const q=Math.random(),nn=window._night||0;if(l){l.intensity=(1.2+q*.5)*(1+2.2*nn);l.distance=14+30*nn;}f.scale.set(1,1.2+q*.5,1);});
 flags.forEach(f=>{const pos=f.geometry.attributes.position,b=f.userData.base,w=f.userData.w,ph=f.userData.ph;for(let i=0;i<pos.count;i++){const k=(b[i*3]+w/2)/w;pos.setZ(i,Math.sin(t*7-k*5+ph)*.22*k*w);pos.setY(i,b[i*3+1]+Math.sin(t*5-k*4+ph)*.05*k);}pos.needsUpdate=true;});
