@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 33 · 23 Nov 05:55</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 34 · 23 Nov 06:05</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -579,12 +579,12 @@ const close=()=>d.classList.remove('on');addEventListener('resize',()=>{if(d.cla
 #hud .vs{flex:none;width:22cqw;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1cqw}
 #hud .vs b{display:grid;place-items:center;width:11cqw;height:12.5cqw;background:linear-gradient(135deg,#ffffff,#c3cbd6 40%,#6d7684 70%,#e8edf3);filter:drop-shadow(0 0 1.6cqw rgba(255,255,255,.7));clip-path:polygon(50% 0,100% 14%,100% 55%,50% 100%,0 55%,0 14%);font-size:6cqw;color:#333;-webkit-text-stroke:.15cqw #fff}
 #hud .rib{position:relative;text-align:center;line-height:1.05;font-size:2.7cqw!important;background:linear-gradient(#ff4a50,#b3141c 60%,#7a0c12);border:.45cqw solid #ffd24a;box-shadow:0 0 2cqw rgba(255,190,60,.8);color:#fff2c0!important;border-radius:1.5cqw;padding:.4cqw 1.6cqw;color:#ffe9b0;white-space:nowrap}
-#hud .ic{display:flex;gap:2.4cqw;margin-top:2cqw}
-#hud .grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:1cqw;padding:1.2cqw;border-radius:2.4cqw;border:.5cqw solid}
+#hud .ic{display:flex;gap:1.6cqw;margin-top:2cqw;align-items:stretch}#hud .ic .dv{flex:none;width:.5cqw;border-radius:1cqw;background:linear-gradient(transparent,#f4e7c0,transparent);margin:2cqw 0}
+#hud .grid{flex:1 1 0;min-width:0;box-sizing:border-box;overflow:hidden;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1cqw;padding:1.2cqw;border-radius:2.4cqw;border:.5cqw solid}
 #hud .grid.k{background:#0f1c4a;border-color:#5f9cff;box-shadow:0 0 2.6cqw #3d8bff,inset 0 0 2cqw rgba(61,139,255,.35)}#hud .grid.a{background:#3a0a0e;border-color:#ff5a5a;box-shadow:0 0 2.6cqw #ff3a3a,inset 0 0 2cqw rgba(255,58,58,.35)}
-#hud .cell{aspect-ratio:1/1.05;border-radius:1.6cqw;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:.6cqw 0 .3cqw;border:.35cqw solid}
+#hud .cell{min-width:0;box-sizing:border-box;overflow:hidden;aspect-ratio:1/1.05;border-radius:1.6cqw;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:.6cqw 0 .3cqw;border:.35cqw solid}
 #hud .grid.k .cell{background:radial-gradient(circle at 50% 30%,#2f58c0,#122660 75%);border-color:#7fb0ff;box-shadow:inset 0 0 1.2cqw rgba(140,190,255,.4)}#hud .grid.a .cell{background:radial-gradient(circle at 50% 30%,#a8161f,#4a070c 75%);border-color:#ff8080;box-shadow:inset 0 0 1.2cqw rgba(255,140,140,.4)}
-#hud .cell img{width:80%;height:62%;object-fit:contain}
+#hud .cell img{display:block;width:80%;max-width:80%;height:62%;min-height:0;object-fit:contain}
 #hud .cell span{font-size:3.6cqw;color:#fff;-webkit-text-stroke:.15cqw #0008}
 #bar button:not([data-v="depan"]){display:none!important}#bar{justify-content:center}#me{top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 10px)!important;right:8px!important}`;document.head.appendChild(st);
 const K=['k_ninja','k_koboi','k_super','k_raksasa','k_robot','k_penyihir','k_samurai','k_tentara'],A=['a_preman','a_bosmafia','a_robot','a_bajaklaut','a_raksasa','a_tentara','a_penyihir','a_ninja'];
@@ -593,7 +593,7 @@ const h=document.createElement('div');h.id='hud';h.innerHTML=`<div class="top">
 <div class="sd k"><div class="tag"><img src="ch/k_pemula.png?v=29">KUCING</div><div class="row"><span class="sw">🗡️</span><span class="pw" id="hpk">0</span><span class="pc" id="hck">50%</span></div><div class="bar"><i id="hbk" style="width:50%"></i></div></div>
 <div class="vs"><div class="rib">⚔ DUEL<br>PERTARUNGAN</div><b>VS</b></div>
 <div class="sd a"><div class="tag">ANJING<img src="ch/a_pemula.png?v=29"></div><div class="row"><span class="sw">🗡️</span><span class="pw" id="hpa">0</span><span class="pc" id="hca">50%</span></div><div class="bar"><i id="hba" style="width:50%"></i></div></div></div>
-<div class="ic"><div class="grid k">${cells(K)}</div><div class="grid a">${cells(A)}</div></div>`;document.body.appendChild(h);
+<div class="ic"><div class="grid k">${cells(K)}</div><div class="dv"></div><div class="grid a">${cells(A)}</div></div>`;document.body.appendChild(h);
 const f=n=>Number(n||0).toLocaleString('id-ID');
 async function upd(){try{if(!window.kvaRpc)return;const j=await window.kvaRpc('kva_ringkasan',{});const pk=+(j.power||{}).kucing||0,pa=+(j.power||{}).anjing||0,t=pk+pa;
  const ck=t?Math.round(pk/t*100):50,ca=t?100-ck:50;
