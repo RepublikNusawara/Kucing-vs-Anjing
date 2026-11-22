@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 56 · 23 Nov 11:40</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 57 · 23 Nov 11:50</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -392,7 +392,7 @@ else{const u=t-sweep.t0;if(u>18.5){sweep=null;cam.position.copy(saved.p);ctl.tar
 {const lp=new THREE.Vector3();cam.getWorldDirection(lp);const tx=cam.position.x+lp.x*300,tz=cam.position.z+lp.z*300,ty=cam.position.y+lp.y*300;const gh=(x,z)=>Math.max(TH(x,z),VY+95-Math.hypot(x-VOX,z-VOZ)*1.64);let need=0;
 need=Math.max(0,gh(cam.position.x,cam.position.z)+1-cam.position.y);
 lift+=(need-lift)*.12;clouds.forEach(c=>{c.visible=c.position.distanceTo(cam.position)>320;});}
-lights.forEach(([l,f])=>{const q=Math.random(),nn=window._night||0;if(l){l.intensity=(1.2+q*.5)*(1+2.2*nn);l.distance=14+30*nn;}f.scale.set(1,1.2+q*.5,1);});
+lights.forEach(([l,f])=>{const q=Math.random(),nn=window._night||0;if(l){l.intensity=(.6+q*.25)*(1+1.1*nn);l.distance=12+18*nn;}f.scale.set(1,1.2+q*.5,1);});
 flags.forEach(f=>{const pos=f.geometry.attributes.position,b=f.userData.base,w=f.userData.w,ph=f.userData.ph;for(let i=0;i<pos.count;i++){const k=(b[i*3]+w/2)/w;pos.setZ(i,Math.sin(t*7-k*5+ph)*.22*k*w);pos.setY(i,b[i*3+1]+Math.sin(t*5-k*4+ph)*.05*k);}pos.needsUpdate=true;});
 trees.forEach(g=>{const p=g.userData.p,w=Math.sin(t*1.5+p)*.045+Math.sin(t*3.3+p*2)*.015;g.rotation.z=w;g.rotation.x=w*.45;});
 wfT.offset.y=-t*1.2;ripT.offset.y=-t*.35;spT.offset.y=-t*.6;spT.offset.x=Math.sin(t*.5)*.05;
@@ -627,7 +627,7 @@ setTimeout(upd,500);setInterval(upd,15000);window.kvaHudRefresh=upd;}
 {const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba(255,220,140,1)');gr.addColorStop(.35,'rgba(255,160,60,.55)');gr.addColorStop(1,'rgba(255,120,20,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);
 const tx=new THREE.CanvasTexture(c),gm=new THREE.SpriteMaterial({map:tx,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,fog:false});const halos=[];
 lights.forEach(([l,f])=>{if(!f)return;const sp=new THREE.Sprite(gm);const p=new THREE.Vector3();f.getWorldPosition(p);const sc=new THREE.Vector3();f.getWorldScale(sc);const k=Math.max(sc.x,.5)*3.2;sp.position.copy(p);sp.scale.set(k,k,1);scene.add(sp);halos.push(sp);});
-(function tick(){const n=window._night||0;gm.opacity=.35+.65*n;requestAnimationFrame(tick);})();}
+(function tick(){const n=window._night||0;gm.opacity=.18+.32*n;requestAnimationFrame(tick);})();}
 /* GLOW-OBOR-END */
 
 /* LATIHAN */
