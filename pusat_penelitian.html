@@ -71,7 +71,7 @@ body{min-height:100vh;display:flex;justify-content:center}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 </head><body class="anjing"><div id="app">
-<div id="top"><div class="back t" onclick="history.length>1?history.back():null">&#10094;</div>
+<div id="top"><div class="back t" onclick="location.href='index.html'">&#10094;</div>
 <div class="ttl t"><b>Pusat Penelitian</b><small id="sub">Basecamp Anjing</small></div></div>
 <div id="bar2"><div class="pill t"><span class="coin">🐾</span>P$ <span id="coin">-</span></div><div class="pill t" id="who" style="cursor:pointer">-</div></div>
 <div id="lab"><img id="labimg" alt=""><div id="lvbox" class="t"><div class="k">Level Penelitian</div><div class="v gold" id="lv">Lv.0</div><div class="pb"><i id="lvp" style="width:0"></i><span id="lvt">0 / 5</span></div></div></div>
@@ -134,11 +134,11 @@ async function mulai(lv){if(busy||!S)return;lv=lv||S.level_selesai+1;const v=LV[
 async function klaim(){if(busy)return;busy=true;try{setS(await rpc('kva_klaim_penelitian',{p_token:tok}));toast('Bonus Power diterapkan!');}catch(e){toast(e.message);await muat();}busy=false;}
 $('go').onclick=()=>S&&S.status==='berjalan'?klaim():mulai();
 async function muat(){if(!tok){showLogin();return;}try{setS(await rpc('kva_status',{p_token:tok}));$('login').style.display='none';}catch(e){if(/Sesi/.test(e.message)){tok=null;try{localStorage.removeItem('kva_token')}catch(_){}showLogin();}else toast(e.message);}}
-let mode='m';function showLogin(){$('login').style.display='flex';}
+let mode='m';function showLogin(){location.href='index.html';}
 $('tbM').onclick=()=>{mode='m';$('tbM').className='on';$('tbD').className='';$('kbw').style.display='none';$('inGo').textContent='Masuk';};
 $('tbD').onclick=()=>{mode='d';$('tbD').className='on';$('tbM').className='';$('kbw').style.display='flex';$('inGo').textContent='Daftar';};
 $('inGo').onclick=async()=>{const n=$('inN').value.trim(),p=$('inP').value.trim();$('inMsg').textContent='Memproses...';try{tok=mode==='m'?await rpc('kva_masuk',{p_nama:n,p_pin:p}):await rpc('kva_daftar',{p_nama:n,p_pin:p,p_kubu:document.querySelector('[name=kb]:checked').value});try{localStorage.setItem('kva_token',tok)}catch(_){}$('inMsg').textContent='';await muat();}catch(e){$('inMsg').textContent=e.message;}};
-let outT=0;$('who').onclick=()=>{if(!S)return;if(Date.now()-outT<2500)confirmOut();else{outT=Date.now();toast('Tap nama sekali lagi untuk keluar akun');}};
+
 function confirmOut(){tok=null;S=null;try{localStorage.removeItem('kva_token')}catch(_){}toast('Keluar dari akun');showLogin();}
 const hk=(location.hash||'').replace('#','');theme(hk==='kucing'?'kucing':'anjing');if(hk==='kucing')document.querySelector('[name=kb][value=kucing]').checked=true;
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)muat();});
