@@ -71,7 +71,7 @@ body{min-height:100vh;display:flex;justify-content:center}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 </head><body class="anjing"><div id="app">
-<div id="top"><div class="back t" onclick="location.href='index.html'">&#10094;</div>
+<div id="top"><div class="back t" onclick="toIndex()">&#10094;</div>
 <div class="ttl t"><b>Pusat Penelitian</b><small id="sub">Basecamp Anjing</small></div></div>
 <div id="bar2"><div class="pill t"><span class="coin">🐾</span>P$ <span id="coin">-</span></div><div class="pill t" id="who" style="cursor:pointer">-</div></div>
 <div id="lab"><img id="labimg" alt=""><div id="lvbox" class="t"><div class="k">Level Penelitian</div><div class="v gold" id="lv">Lv.0</div><div class="pb"><i id="lvp" style="width:0"></i><span id="lvt">0 / 5</span></div></div></div>
@@ -105,6 +105,8 @@ const LV=[{n:'I',b:5,c:10000,m:5},{n:'II',b:10,c:50000,m:15},{n:'III',b:15,c:100
 const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('id-ID');
 let S=null,skew=0,busy=false,tok=null;
 try{tok=localStorage.getItem('kva_token')}catch(e){}
+{const m=(location.hash||'').match(/[#&]t=([0-9a-f-]{36})/i);if(m){tok=m[1];try{localStorage.setItem('kva_token',tok)}catch(_){}try{history.replaceState(null,'',location.pathname+'#'+(location.hash||'').replace('#','').split('&')[0])}catch(_){}}}
+const toIndex=()=>{location.href='index.html'+(tok?'#t='+tok:'');};
 async function rpc(fn,args){const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(args)});const j=await r.json().catch(()=>null);if(!r.ok)throw new Error((j&&j.message)||'Gagal terhubung ke server');return j;}
 function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',2600);}
 function theme(k){document.body.className=k;$('sub').textContent='Basecamp '+(k==='kucing'?'Kucing':'Anjing');$('labimg').src=IMG[k].lab;$('emb').src=IMG[k].emb;}
@@ -140,7 +142,7 @@ $('tbD').onclick=()=>{mode='d';$('tbD').className='on';$('tbM').className='';$('
 $('inGo').onclick=async()=>{const n=$('inN').value.trim(),p=$('inP').value.trim();$('inMsg').textContent='Memproses...';try{tok=mode==='m'?await rpc('kva_masuk',{p_nama:n,p_pin:p}):await rpc('kva_daftar',{p_nama:n,p_pin:p,p_kubu:document.querySelector('[name=kb]:checked').value});try{localStorage.setItem('kva_token',tok)}catch(_){}$('inMsg').textContent='';await muat();}catch(e){$('inMsg').textContent=e.message;}};
 
 function confirmOut(){tok=null;S=null;try{localStorage.removeItem('kva_token')}catch(_){}toast('Keluar dari akun');showLogin();}
-const hk=(location.hash||'').replace('#','');theme(hk==='kucing'?'kucing':'anjing');if(hk==='kucing')document.querySelector('[name=kb][value=kucing]').checked=true;
+const hk=(location.hash||'').replace('#','').split('&')[0];theme(hk==='kucing'?'kucing':'anjing');if(hk==='kucing')document.querySelector('[name=kb][value=kucing]').checked=true;
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)muat();});
 muat();
 </script></body></html>
