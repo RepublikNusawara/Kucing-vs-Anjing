@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 39 · 23 Nov 06:50</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 40 · 23 Nov 07:05</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -365,8 +365,9 @@ const VIEWS={depan:[0,1.08,790],jam3:[Math.PI/2,1.0,330],jam9:[-Math.PI/2,1.0,33
 const target=new THREE.Vector3(0,4,-100);const TGT0=target.clone();
 const sph=(v,tg)=>{const [a,b,c]=VIEWS[v];return new THREE.Vector3(tg.x+c*Math.sin(b)*Math.sin(a),tg.y+c*Math.cos(b),tg.z+c*Math.sin(b)*Math.cos(a));};
 cam.position.copy(sph('depan',target));
-const ctl=new THREE.MapControls(cam,r.domElement);ctl.target.copy(target);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.screenSpacePanning=false;ctl.minDistance=3;ctl.maxDistance=1200;ctl.minPolarAngle=0;ctl.maxPolarAngle=Math.PI/2+.35;ctl.zoomSpeed=1;ctl.rotateSpeed=.6;ctl.panSpeed=1;ctl.autoRotateSpeed=.6;
-ctl.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};ctl.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.PAN};ctl.enableRotate=true;ctl.rotateSpeed=.3;ctl.zoomSpeed=.5;ctl.panSpeed=.5;ctl.dampingFactor=.12;ctl.update();
+const ctl=new THREE.OrbitControls(cam,r.domElement);ctl.target.copy(target);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.maxPolarAngle=1.54;ctl.minDistance=3;ctl.maxDistance=1200;ctl.screenSpacePanning=false;ctl.autoRotateSpeed=.6;
+/* sama dengan peta Nusawara: 1 jari geser = kamera bergerak mengikuti tarikan; 2 jari = cubit zoom + putar arah kamera */
+ctl.touches={ONE:THREE.TOUCH.PAN,TWO:THREE.TOUCH.DOLLY_ROTATE};ctl.panSpeed=1.2;ctl.update();
 let fly=null;
 function setView(v){fly={p0:cam.position.clone(),t0:ctl.target.clone(),p1:sph(v,TGT0),t1:TGT0.clone(),s:performance.now()};document.querySelectorAll('#bar button[data-v]').forEach(btn=>btn.classList.toggle('on',btn.dataset.v===v));}
 document.querySelectorAll('#bar button[data-v]').forEach(b=>b.onclick=()=>setView(b.dataset.v));
