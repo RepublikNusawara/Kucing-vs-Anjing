@@ -13,7 +13,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </style></head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;top:calc(env(safe-area-inset-top) + 8px);z-index:30;font:600 11px system-ui;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:2px 8px;border-radius:8px;pointer-events:none">versi 7 · 22 Nov 22:39</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;top:calc(env(safe-area-inset-top) + 8px);z-index:30;font:600 11px system-ui;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:2px 8px;border-radius:8px;pointer-events:none">versi 8 · 22 Nov 22:41</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -442,5 +442,5 @@ q('lgK').querySelectorAll('button').forEach(b=>b.onclick=()=>{kb=b.dataset.k;q('
 const done=j=>{window.KVA_B=j.bangunan||{};window.KVA_S=j;window.KVA_T=Date.now();ls('kva_kubu',j.kubu);ls('kva_nama',j.nama);lg.style.display='none';me.style.display='block';me.textContent=(j.kubu==='kucing'?'🐱 ':'🐶 ')+j.nama;ctl.enabled=true;};
 let outT=0;me.onclick=()=>{if(Date.now()-outT<2500){ls('kva_token',null);ls('kva_kubu',null);me.style.display='none';lg.style.display='flex';ctl.enabled=false;}else{outT=Date.now();me.textContent='Tap lagi untuk keluar';setTimeout(()=>{const n=ls('kva_nama');if(n&&me.style.display!=='none')me.textContent=(ls('kva_kubu')==='kucing'?'🐱 ':'🐶 ')+n;},2500);}};
 q('lgGo').onclick=async()=>{const n=q('lgN').value.trim(),p=q('lgP').value.trim();q('lgMsg').textContent='Memproses...';try{const t=mode==='m'?await rpc('kva_masuk',{p_nama:n,p_pin:p}):await rpc('kva_daftar',{p_nama:n,p_pin:p,p_kubu:kb});ls('kva_token',t);const j=await rpc('kva_status',{p_token:t});ls('kva_nama',j.nama);ls('kva_kubu',j.kubu);q('lgMsg').textContent='';done(j);}catch(e){q('lgMsg').textContent=e.message;}};
-const t0=ls('kva_token');ctl.enabled=false;if(t0){rpc('kva_status',{p_token:t0}).then(done).catch(e=>{if(/Sesi/.test(e.message))ls('kva_token',null);});}}
+const t0=ls('kva_token');if(t0){lg.style.display='none';const n=ls('kva_nama');if(n){me.style.display='block';me.textContent=(ls('kva_kubu')==='kucing'?'🐱 ':'🐶 ')+n;}rpc('kva_status',{p_token:t0}).then(done).catch(e=>{if(/Sesi/.test(e.message)){ls('kva_token',null);ls('kva_kubu',null);me.style.display='none';lg.style.display='flex';ctl.enabled=false;}});}else ctl.enabled=false;}
 </script></body></html>
