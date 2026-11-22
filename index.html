@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 57 · 23 Nov 11:50</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 58 · 23 Nov 12:00</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -775,9 +775,11 @@ function render(){const C=AC[kb],S=window.KVA_S||{},inv=(S.inventaris||[]).filte
  tx(C.lbl,'TOTAL POWER','',3.4).style.paddingLeft='1.2cqw';tx(C.pw,f(S.total_power),'big',6.4);tx(C.tp,f(inv.length),'',6.2).style.justifyContent='center';
  C.cards.forEach(c=>tx(c.n,'x'+f(cnt[c.id]||0),'big',kb==='kucing'?4.2:4.4).style.justifyContent='center');
  const L=inv.map(x=>({it:x.item,z:SZ[x.item]||1.5})).sort((a,b)=>a.z-b.z);const [fl,ft,fw,fh]=C.field;
- let sc=1,rows;const lay=()=>{rows=[];let cur=[],w=0;L.forEach(o=>{const x=3.4*sc*o.z*AR;if(w+x>fw&&cur.length){rows.push(cur);cur=[];w=0;}cur.push(o);w+=x;});if(cur.length)rows.push(cur);return rows.reduce((a,r)=>a+Math.max(...r.map(o=>3.4*sc*o.z))*.35,0);};
- for(let k=0;k<60&&lay()>fh;k++)sc*=.9;
- let y=ft+fh;rows.forEach((row,ri)=>{const ws=row.map(o=>3.4*sc*o.z*AR),tw=ws.reduce((a,b)=>a+b,0);let xx=fl+fw/2-tw/2;row.forEach((o,c)=>{const im=document.createElement('img');im.className='ch';im.src='ch/'+o.it+'.png?v=33';Object.assign(im.style,{left:(xx+ws[c]/2)+'%',top:y+'%',height:3.4*sc*o.z+'%',zIndex:100-ri,animationDelay:(-Math.random()*1.6)+'s'});H.appendChild(im);xx+=ws[c];});y-=Math.max(...row.map(o=>3.4*sc*o.z))*.35;});
+ let sc=1,rows;const lay=()=>{rows=[];let cur=[],w=0,lz=null;L.forEach(o=>{const x=3.4*sc*o.z*AR;if(cur.length&&(w+x>fw||o.z!==lz)){rows.push(cur);cur=[];w=0;}cur.push(o);w+=x;lz=o.z;});if(cur.length)rows.push(cur);return rows.reduce((a,r)=>a+Math.max(...r.map(o=>3.4*sc*o.z))*.35,0);};
+ {const g=new Set(L.map(o=>o.z)).size,R=Math.max(1,Math.min(4,g,Math.ceil(L.length/3)));rows=[];const per=Math.ceil(L.length/R);for(let r=0;r<R;r++){const c=L.slice(r*per,(r+1)*per);if(c.length)rows.push(c);}}
+ const rw=row=>row.reduce((a,o)=>a+3.4*sc*o.z*AR*.75,0);for(let k=0;k<60&&rows.some(r=>rw(r)>fw);k++)sc*=.92;
+ const n=rows.length,step=n>1?fh*.55/(n-1):0;
+ rows.forEach((row,ri)=>{const y=ft+fh-ri*step,w0=row.map(o=>3.4*sc*o.z*AR*.75),k=Math.min(2.2,fw*.9/w0.reduce((a,b)=>a+b,0)),ws=w0.map(w=>w*Math.max(1,k)),tw=ws.reduce((a,b)=>a+b,0);let xx=fl+fw/2-tw/2;row.forEach((o,c)=>{const im=document.createElement('img');im.className='ch';im.src='ch/'+o.it+'.png?v=33';Object.assign(im.style,{left:(xx+ws[c]/2)+'%',top:y+'%',height:3.4*sc*o.z+'%',zIndex:100-ri,animationDelay:(-Math.random()*1.6)+'s'});H.appendChild(im);xx+=ws[c];});});
  const bk=document.createElement('div');bk.className='h';P(bk,C.back);bk.onclick=close;H.appendChild(bk);}
 const fit=()=>{const w=innerWidth,h=innerHeight,aw=w-20,ah=h-30;let bw=aw,bhh=aw/AR;if(bhh>ah){bhh=ah;bw=ah*AR;}b.style.width=bw+'px';b.style.height=bhh+'px';};
 const open=()=>{kb=/anjing/.test(document.getElementById('bci').getAttribute('src'))?'anjing':'kucing';render();fit();d.classList.add('on');let t=null;try{t=localStorage.getItem('kva_token')}catch(_){}if(t&&window.kvaRpc)window.kvaRpc('kva_status',{p_token:t}).then(j=>{window.KVA_S=j;if(d.classList.contains('on'))render();}).catch(()=>{});};
