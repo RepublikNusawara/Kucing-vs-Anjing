@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 32 · 23 Nov 05:40</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 33 · 23 Nov 05:55</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -467,13 +467,14 @@ function render(){const C=CFG[side];document.getElementById('muimg').src=C.img;
  const pe=document.getElementById('mupw');P(pe,C.pw);pe.style.fontSize=C.pw[4]+'cqw';pe.style.background=C.pw[5];pe.textContent=pw.toLocaleString('en-US');
  P(document.getElementById('muback'),C.back);
  const T=document.getElementById('mut');T.innerHTML='';const [y0,y1,RW,B]=C.troop,ar=C.ar;
- const G=(grp||[]).filter(g=>g.i&&g.i.length).slice(0,MAXT);const ng=Math.max(1,G.length),f=Math.min(1,Math.sqrt(6/ng)),base=B*f*1.25;
- const W=it=>base*(SZ[it]||1)*.95/ar,gw=g=>g.i.reduce((a,it)=>a+W(it)*.8,0)+base*.25/ar;
- const rows=[];let cur=[],w=0;G.forEach(g=>{const x=gw(g);if(w+x>RW&&cur.length){rows.push(cur);cur=[];w=0;}cur.push(g);w+=x;});if(cur.length)rows.push(cur);
- rows.forEach((row,ri)=>{const st=rows.length>1?Math.min((y1-y0)/(rows.length-1),base*1.9):0,y=rows.length>1?y0+6+st*ri:(y0+y1)/2,tw=row.reduce((a,g)=>a+gw(g),0);let xx=50-tw/2;
-  row.forEach(g=>{const gx=xx;let mh=0;g.i.forEach(it=>{const im=document.createElement('img');im.src='ch/'+it+'.png?v=27';const h=base*(SZ[it]||1)*(1+ri*.04);mh=Math.max(mh,h);Object.assign(im.style,{left:(xx+W(it)*.4)+'%',top:y+'%',height:h+'%',zIndex:ri,animationDelay:(-Math.random()*1.6)+'s'});T.appendChild(im);xx+=W(it)*.8;});
-   const lb=document.createElement('div');lb.className='mun';lb.textContent=g.n;Object.assign(lb.style,{left:(gx+(xx-gx)/2)+'%',top:(y-mh-1.2)+'%',fontSize:Math.max(1.4,2.6*f)+'cqw',zIndex:50+ri});T.appendChild(lb);xx+=base*.25/ar;});});
- const mo=document.getElementById('mumore');mo.style.top=C.more+'%';mo.style.fontSize=C.mf+'cqw';if(n>MAXT){mo.style.display='block';mo.textContent='+'+(n-MAXT).toLocaleString('en-US')+' pasukan lainnya';}else mo.style.display='none';}
+ const L=[];(grp||[]).forEach(g=>(g.i||[]).forEach(it=>L.push({it,n:g.n,z:SZ[it]||1})));L.sort((a,b)=>b.z-a.z);
+ const H0=y1-y0+8;let sc=.625,rows;
+ const lay=()=>{rows=[];let cur=[],w=0;L.forEach(o=>{const x=B*sc*o.z*.95/ar*.85;if(w+x>RW&&cur.length){rows.push(cur);cur=[];w=0;}cur.push(o);w+=x;});if(cur.length)rows.push(cur);return rows.reduce((a,r)=>a+Math.max(...r.map(o=>B*sc*o.z))*.55,0);};
+ let used=lay();for(let k=0;k<60&&used>H0;k++){sc*=.92;used=lay();}
+ let y=y0-2+Math.max(0,(H0-used)/2);rows.forEach((row,ri)=>{const mh=Math.max(...row.map(o=>B*sc*o.z));y+=mh*.55;const ws=row.map(o=>B*sc*o.z*.95/ar*.85),tw=ws.reduce((a,b)=>a+b,0);let xx=50-tw/2;
+  row.forEach((o,c)=>{const h=B*sc*o.z,im=document.createElement('img');im.src='ch/'+o.it+'.png?v=33';Object.assign(im.style,{left:(xx+ws[c]/2)+'%',top:y+'%',height:h+'%',zIndex:ri,animationDelay:(-Math.random()*1.6)+'s'});T.appendChild(im);
+   if(sc>.25){const lb=document.createElement('div');lb.className='mun';lb.textContent=o.n;Object.assign(lb.style,{left:(xx+ws[c]/2)+'%',top:(y-h-.3)+'%',fontSize:Math.max(1,3.4*sc)+'cqw',zIndex:50+ri});T.appendChild(lb);}xx+=ws[c];});});
+ const mo=document.getElementById('mumore');mo.style.display='none';if(0){mo.style.top=C.more+'%';mo.style.fontSize=C.mf+'cqw';if(n>MAXT){mo.style.display='block';mo.textContent='+'+(n-MAXT).toLocaleString('en-US')+' pasukan lainnya';}else mo.style.display='none';}}
 const fit=()=>{const ar=CFG[side].ar,w=innerWidth,h=innerHeight,aw=w-34,ah=h-44;let bw=aw,bh=aw/ar;if(bh>ah){bh=ah;bw=ah*ar;}mb.style.width=bw+'px';mb.style.height=bh+'px';x.style.left=((w+bw)/2+8-21)+'px';x.style.top=((h-bh)/2-8-21)+'px';};
 const load=()=>{try{const t=localStorage.getItem('kva_token');if(t&&window.kvaRpc){window.kvaRpc('kva_status',{p_token:t}).then(j=>{if(j&&j.kubu===(side?'anjing':'kucing')){data=j;window.KVA_S=j;window.kvaRpc('kva_markas',{p_token:t}).then(g=>{grp=g;if(d.classList.contains('on'))render();}).catch(()=>{});if(d.classList.contains('on'))render();}}).catch(()=>{});}}catch(_){}};
 const open=()=>{data=null;grp=null;render();fit();d.classList.add('on');load();};const close=()=>d.classList.remove('on');
