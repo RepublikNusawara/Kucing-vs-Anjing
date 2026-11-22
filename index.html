@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 31 · 23 Nov 05:25</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 32 · 23 Nov 05:40</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -343,8 +343,8 @@ label('Pemula',-5.5,9.5,178,'#2f6fe0');label('Pemula',7.5,13,178,'#e53935');
 /* UKURAN-PREVIEW-END */
 /* siang-malam mengikuti jam asli */
 const skyT=s=>{const c=document.createElement('canvas');c.width=2;c.height=256;const g=c.getContext('2d');const gr=g.createLinearGradient(0,0,0,256);s.forEach((col,i)=>gr.addColorStop(i/(s.length-1),col));g.fillStyle=gr;g.fillRect(0,0,2,256);return new THREE.CanvasTexture(c);};
-const SKY={siang:skyT(['#2456b8','#7aa4d8','#b9cfe3']),senja:skyT(['#262a66','#b0587a','#f2a25c']),malam:skyT(['#120f33','#3a2b6e','#7a5a9a'])};
-const fogD=new THREE.Color(0xb9cfe3),fogS=new THREE.Color(0xd99a7a),fogN=new THREE.Color(0x4a3a72);
+const SKY={siang:skyT(['#2456b8','#7aa4d8','#b9cfe3']),senja:skyT(['#262a66','#b0587a','#f2a25c']),malam:skyT(['#0c0620','#1f0a36','#3a1448','#7a5690','#b394bc'])};
+const fogD=new THREE.Color(0xb9cfe3),fogS=new THREE.Color(0xd99a7a),fogN=new THREE.Color(0x8a6c9c);
 const moonL=new THREE.DirectionalLight(0x9db8ff,0);moonL.position.set(200,300,-150);scene.add(moonL);
 const moon=new THREE.Mesh(new THREE.SphereGeometry(28,24,16),new THREE.MeshBasicMaterial({color:0xf6f2dc,fog:false}));scene.add(moon);
 const stG=new THREE.BufferGeometry(),sp2=[];for(let i=0;i<1800;i++){const u=Math.random()*6.28,v=Math.random()*1.35;sp2.push(Math.cos(u)*Math.sin(v)*1500,Math.cos(v)*1500+40,Math.sin(u)*Math.sin(v)*1500);}stG.setAttribute('position',new THREE.Float32BufferAttribute(sp2,3));
@@ -355,10 +355,10 @@ function updTime(){const d=new Date();const h=tMode===1?12:tMode===2?22:d.getHou
 const df=sst(5.3,7,h)*(1-sst(17.6,19.3,h));DF=df;const dusk=Math.max(sst(5,6.5,h)*(1-sst(7,8,h)),sst(16.8,18.2,h)*(1-sst(18.8,19.8,h)));
 const key=df>.55?'siang':(dusk>.35?'senja':'malam');if(key!==lastSky){scene.background=SKY[key];lastSky=key;}
 const a=(h-6)/12*Math.PI;sun.position.set(-Math.cos(a)*300,Math.max(20,Math.sin(a)*300),160);sun.intensity=1.4*df+.25*dusk;sun.color.setHex(dusk>.3?0xffb27a:0xfff2dc);
-hemi.intensity=HB*(.62+.38*df);fill.intensity=.6*(.7+.3*df);moonL.intensity=.75*(1-df);moonL.color.setHex(0xffd9b0);
+hemi.intensity=HB*(.85+.15*df);hemi.color.setRGB(1,.93+.07*df,.9+.1*df);hemi.groundColor.setHex(df>.5?0x7a8a50:0x9aa060);fill.intensity=.6*(.7+.3*df);moonL.intensity=.75*(1-df);moonL.color.setHex(0xffd9b0);
 const fc=fogD.clone().lerp(fogN,1-df);if(dusk>.2)fc.lerp(fogS,dusk*.5);scene.fog.color.copy(fc);
-r.toneMappingExposure=1.05+.25*df;stars.material.opacity=Math.max(0,.6-df*1.6);moon.visible=df<.6;moon.position.set(Math.cos(a)*900,Math.max(150,-Math.sin(a)*700+250),-700);
-litMats.forEach(m=>m.emissiveIntensity=.2+.65*(1-df));clouds.forEach(c=>c.children.forEach(s=>s.material.color.setRGB(.25+.75*df,.28+.72*df,.36+.64*df)));window._night=1-df;}
+r.toneMappingExposure=1.25+.05*df;stars.material.opacity=Math.max(0,.6-df*1.6);moon.visible=df<.6;moon.position.set(Math.cos(a)*900,Math.max(150,-Math.sin(a)*700+250),-700);
+litMats.forEach(m=>m.emissiveIntensity=.2+.65*(1-df));clouds.forEach(c=>c.children.forEach(s=>s.material.color.setRGB(.62+.38*df,.5+.5*df,.72+.28*df)));window._night=1-df;}
 updTime();setInterval(updTime,30000);
 /* kamera (kontrol seperti peta Nusawara: MapControls) */
 const VIEWS={depan:[0,1.08,790],jam3:[Math.PI/2,1.0,330],jam9:[-Math.PI/2,1.0,330],belakang:[Math.PI,1.0,360],atas:[0,.2,480]};
