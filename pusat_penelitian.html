@@ -106,7 +106,7 @@ const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('id-ID')
 let S=null,skew=0,busy=false,tok=null;
 try{tok=localStorage.getItem('kva_token')}catch(e){}
 {const m=(location.hash||'').match(/[#&]t=([0-9a-f-]{36})/i);if(m){tok=m[1];try{localStorage.setItem('kva_token',tok)}catch(_){}try{history.replaceState(null,'',location.pathname+'#'+(location.hash||'').replace('#','').split('&')[0])}catch(_){}}}
-const toIndex=()=>{location.href='index.html'+(tok?'#t='+tok:'');};
+const toIndex=()=>{location.href='index.html#bc=1'+(tok?'&t='+tok:'');};
 async function rpc(fn,args){const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(args)});const j=await r.json().catch(()=>null);if(!r.ok)throw new Error((j&&j.message)||'Gagal terhubung ke server');return j;}
 function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',2600);}
 function theme(k){document.body.className=k;$('sub').textContent='Basecamp '+(k==='kucing'?'Kucing':'Anjing');$('labimg').src=IMG[k].lab;$('emb').src=IMG[k].emb;}
