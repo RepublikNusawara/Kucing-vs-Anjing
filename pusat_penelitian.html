@@ -78,9 +78,11 @@ body{min-height:100vh;display:flex;justify-content:center}
 <div class="ribbon t">Penelitian Power Pasukan</div>
 <div class="panel">
  <div id="info"><img id="emb" alt=""><div class="tx"><span class="tag t">Power Pasukan</span><p>Meningkatkan total Power semua pasukan.</p>
-  <div class="stat t"><span>Power dasar</span><span id="pd">-</span></div>
+  <div class="stat t"><span>Power Pasukan</span><span id="ppk">-</span></div>
+  <div class="stat t"><span>Power Senjata</span><span id="psj">-</span></div>
+  <div class="stat t"><span>Power dasar <small style="opacity:.7;font-size:.75em">(pasukan + senjata)</small></span><span id="pd">-</span></div>
   <div class="stat t"><span>Bonus</span><span class="up" style="color:#7dff6a" id="bn">+0%</span></div>
-  <div class="stat t"><span>Total Power</span><span class="gold" id="tp">-</span></div></div></div>
+  <div class="stat t"><span>Total Power <small style="opacity:.7;font-size:.75em">(power dasar + bonus) → Markas Utama</small></span><span class="gold" id="tp">-</span></div></div></div>
  <div id="rows"></div>
 </div>
 <div id="cur"><span class="h t">Penelitian Saat Ini</span>
@@ -114,7 +116,7 @@ function setS(j){S=j;skew=new Date(j.sekarang).getTime()-Date.now();theme(j.kubu
 const hms=s=>{s=Math.max(0,Math.ceil(s));return[s/3600|0,(s%3600)/60|0,s%60].map(v=>String(v).padStart(2,'0')).join(':')};
 function render(){if(!S)return;const L=S.level_selesai,run=S.status==='berjalan';
  $('coin').textContent=fmt(S.pet_coin);$('who').textContent='👤 '+S.nama;$('lv').textContent='Lv.'+L;$('lvp').style.width=(L/5*100)+'%';$('lvt').textContent=L+' / 5';
- $('pd').textContent=fmt(S.power_dasar);$('bn').textContent='+'+Math.round(S.bonus*100)+'%';$('tp').textContent=fmt(S.total_power);$('kk').textContent=fmt(S.kekuatan_kubu);
+ {const pp=+S.power_pasukan||0,ps=+S.power_senjata||0;$('ppk').textContent=fmt(pp);$('psj').textContent=fmt(ps);$('pd').textContent=fmt((+S.power_dasar||0)+pp+ps);}$('bn').textContent='+'+Math.round(S.bonus*100)+'%';$('tp').textContent=fmt(S.total_power);$('kk').textContent=fmt(S.kekuatan_kubu);
  $('rows').innerHTML=LV.map((v,i)=>{const lv=i+1;let cls,act;
   if(lv<=L){cls='done';act='<span class="ok t">✔ Selesai</span>';}
   else if(run&&S.aktif_level===lv){cls='siap';act='<div class="tmr t" data-tmr>--:--:--</div><div class="pb"><i data-tpb style="width:0"></i></div>';}
