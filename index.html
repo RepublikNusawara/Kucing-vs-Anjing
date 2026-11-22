@@ -13,7 +13,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </style></head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;top:calc(env(safe-area-inset-top) + 8px);z-index:30;font:600 11px system-ui;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:2px 8px;border-radius:8px;pointer-events:none">versi 15 · 23 Nov 01:00</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;top:calc(env(safe-area-inset-top) + 8px);z-index:30;font:600 11px system-ui;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:2px 8px;border-radius:8px;pointer-events:none">versi 16 · 23 Nov 01:10</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -483,4 +483,9 @@ const POS={p:{coin:[51.76,2.45,8.47,2.19],dia:[70.59,2.45,6.12,2.19],f:2.3},l:{c
 const P=(e,[l,t,w,h])=>Object.assign(e.style,{left:l+'%',top:t+'%',width:w+'%',height:h+'%'});
 setInterval(()=>{if(!document.getElementById('bcp').classList.contains('on'))return;const o=POS[innerHeight>innerWidth?'p':'l'];P(c,o.coin);P(dm,o.dia);c.style.fontSize=dm.style.fontSize=o.f+'cqw';const S=window.KVA_S;c.textContent=(S?+S.pet_coin||0:0).toLocaleString('en-US');dm.textContent='0';},300);}
 /* BASECAMP-KOIN-END */
+
+/* BERANDA */
+{const st=document.createElement('style');st.textContent='#bchome{position:absolute;cursor:pointer;z-index:4;left:0.8%;top:14.5%;width:13%;height:9.5%}@media (orientation:portrait){#bchome{left:1.2%;top:9.6%;width:17.6%;height:4.8%}}';document.head.appendChild(st);
+const h=document.createElement('div');h.id='bchome';document.getElementById('bcb').appendChild(h);h.onclick=e=>{e.stopPropagation();document.getElementById('bcx').click();};}
+/* BERANDA-END */
 </script></body></html>
