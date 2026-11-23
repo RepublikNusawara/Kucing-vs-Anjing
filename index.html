@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 59 · 23 Nov 14:30</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 60 · 23 Nov 14:45</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -454,7 +454,7 @@ q('lgD').onclick=()=>{mode='d';q('lgD').className='on';q('lgM').className='';q('
 q('lgK').querySelectorAll('button').forEach(b=>b.onclick=()=>{kb=b.dataset.k;q('lgK').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));});
 const done=j=>{window.KVA_B=j.bangunan||{};window.KVA_S=j;window.KVA_T=Date.now();ls('kva_kubu',j.kubu);ls('kva_nama',j.nama);lg.style.display='none';me.style.display='block';me.textContent=(j.kubu==='kucing'?'🐱 ':'🐶 ')+j.nama;ctl.enabled=true;};
 let outT=0;me.onclick=()=>{if(Date.now()-outT<2500){ls('kva_token',null);ls('kva_kubu',null);me.style.display='none';lg.style.display='flex';ctl.enabled=false;}else{outT=Date.now();me.textContent='Tap lagi untuk keluar';setTimeout(()=>{const n=ls('kva_nama');if(n&&me.style.display!=='none')me.textContent=(ls('kva_kubu')==='kucing'?'🐱 ':'🐶 ')+n;},2500);}};
-q('lgGo').onclick=async()=>{const n=q('lgN').value.trim(),p=q('lgP').value.trim();q('lgMsg').textContent='Memproses...';try{const t=mode==='m'?await rpc('kva_masuk',{p_nama:n,p_pin:p}):await rpc('kva_daftar',{p_nama:n,p_pin:p,p_kubu:kb});ls('kva_token',t);const j=await rpc('kva_status',{p_token:t});ls('kva_nama',j.nama);ls('kva_kubu',j.kubu);q('lgMsg').textContent='';done(j);if(mode!=='m'&&window.kvaWelcome)kvaWelcome(j.kubu);}catch(e){q('lgMsg').textContent=e.message;}};
+q('lgGo').onclick=async()=>{const n=q('lgN').value.trim(),p=q('lgP').value.trim();q('lgMsg').textContent='Memproses...';window.KVA_WELCOME_ON=true;try{const t=mode==='m'?await rpc('kva_masuk',{p_nama:n,p_pin:p}):await rpc('kva_daftar',{p_nama:n,p_pin:p,p_kubu:kb});ls('kva_token',t);const j=await rpc('kva_status',{p_token:t});ls('kva_nama',j.nama);ls('kva_kubu',j.kubu);q('lgMsg').textContent='';done(j);if(mode!=='m'&&window.kvaWelcome)kvaWelcome(j.kubu);else if(window.kvaDailyFlow)kvaDailyFlow(()=>window.kvaOpenHome&&kvaOpenHome());}catch(e){window.KVA_WELCOME_ON=false;q('lgMsg').textContent=e.message;}};
 const BC=/[#&]bc=1/.test(location.hash||'');{const m=(location.hash||'').match(/[#&]t=([0-9a-f-]{36})/i);if(m)ls('kva_token',m[1]);if(m||BC){try{history.replaceState(null,'',location.pathname)}catch(_){}}}
 if(BC&&ls('kva_token')){const kb0=ls('kva_kubu');if(kb0&&window.kvaOpenBC)window.kvaOpenBC(kb0==='kucing'?'cat':'dog');}
 const t0=ls('kva_token');if(t0){lg.style.display='none';const n=ls('kva_nama');if(n){me.style.display='block';me.textContent=(ls('kva_kubu')==='kucing'?'🐱 ':'🐶 ')+n;}rpc('kva_status',{p_token:t0}).then(done).catch(e=>{if(/Sesi/.test(e.message)){ls('kva_token',null);ls('kva_kubu',null);me.style.display='none';lg.style.display='flex';ctl.enabled=false;}});}else ctl.enabled=false;}
@@ -679,11 +679,12 @@ function render(){H.innerHTML='';P(document.getElementById('dlbk'),DL.back);cons
 K.onclick=async()=>{if(!S||S.login_klaim_hari_ini||busy)return;let t=null;try{t=localStorage.getItem('kva_token')}catch(_){}if(!t)return;busy=true;
  try{const j=await window.kvaRpc('kva_klaim_login',{p_token:t});S=j.status;window.KVA_S=j.status;kvaToast('Hadiah diterima: P$ '+f(j.coin)+' + '+f(j.kupon)+' Kupon');render();}catch(e){kvaToast(e.message);}busy=false;};
 const fit=()=>{const w=innerWidth,h=innerHeight,aw=w-20,ah=h-40-70;let bw=aw,bhh=aw/AR;if(bhh>ah){bhh=ah;bw=ah*AR;}b.style.width=bw+'px';b.style.height=bhh+'px';K.style.width=bw+'px';};
-const open=()=>{render();fit();d.classList.add('on');};const close=()=>d.classList.remove('on');document.getElementById('dlbk').onclick=close;d.onclick=e=>{if(e.target===d)close();};
+const open=()=>{render();fit();d.classList.add('on');};const close=()=>{d.classList.remove('on');const cb=window.KVA_AFTER_DAILY;window.KVA_AFTER_DAILY=null;if(cb)cb();};document.getElementById('dlbk').onclick=close;
+window.kvaDailyFlow=async(cb,onlyIfShown)=>{const t=localStorage.getItem('kva_token');if(!t){cb&&!onlyIfShown&&cb();return;}lastTok=t;await load(t);if(S&&!S.login_klaim_hari_ini){window.KVA_AFTER_DAILY=cb;open();}else if(cb&&!onlyIfShown)cb();};d.onclick=e=>{if(e.target===d)close();};
 ic.onclick=async()=>{let t=null;try{t=localStorage.getItem('kva_token')}catch(_){}if(!t){kvaToast('Masuk dulu untuk klaim hadiah harian');return;}await load(t);open();};
 addEventListener('resize',()=>{if(d.classList.contains('on'))fit();});
 async function load(t){try{S=await window.kvaRpc('kva_status',{p_token:t});window.KVA_S=S;render();}catch(e){}}
-let lastTok=null;setInterval(async()=>{let t=null;try{t=localStorage.getItem('kva_token')}catch(_){}if(t&&t!==lastTok&&window.kvaRpc&&!window.KVA_WELCOME_ON){lastTok=t;await load(t);if(S&&!S.login_klaim_hari_ini)open();}if(!t)lastTok=null;},1500);}
+let lastTok=null;setInterval(async()=>{let t=null;try{t=localStorage.getItem('kva_token')}catch(_){}if(t&&t!==lastTok&&window.kvaRpc&&!window.KVA_WELCOME_ON){window.kvaDailyFlow(()=>window.kvaOpenHome&&kvaOpenHome(),true);}if(!t)lastTok=null;},1500);}
 /* DAILY-LOGIN-END */
 
 /* UPGRADE-SENJATA */
@@ -827,7 +828,7 @@ async function refresh(){const t=tok();if(!t||!window.kvaRpc)return null;try{con
 const unclaimed=S=>S?(!S.mail_selamat)+(!S.mail_sambutan):0;
 /* ---- WELCOME ---- */
 const W=mk('kvwel',70);
-window.kvaWelcome=kb=>{window.KVA_WELCOME_ON=true;W.I.src='wel_'+kb+'.jpg?v=59';W.H.innerHTML='';hs(W,pc([290,1015,910,1150],1199,1312),()=>{W.classList.remove('on');openHome();});fit(W,1199/1312);W.classList.add('on');};
+window.kvaWelcome=kb=>{window.KVA_WELCOME_ON=true;W.I.src='wel_'+kb+'.jpg?v=59';W.H.innerHTML='';hs(W,pc([290,1015,910,1150],1199,1312),()=>{W.classList.remove('on');if(window.kvaDailyFlow)kvaDailyFlow(openHome);else openHome();});fit(W,1199/1312);W.classList.add('on');};
 /* ---- HOME ---- */
 const HM=mk('kvhome',58);let hkb='kucing';
 const TILE={kucing:{t:[725,990],n:1295,h:240},anjing:{t:[705,965],n:1280,h:240}};
