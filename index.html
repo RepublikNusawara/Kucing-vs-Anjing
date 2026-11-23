@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 69 · 23 Nov 15:45</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 70 · 23 Nov 16:05</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -839,7 +839,7 @@ function renderHome(){const S=window.KVA_S||{},T=TILE[hkb],WW=hkb==='anjing'?108
  add(HM,'v',q([594,22,722,60]),f(S.pet_coin),2.8);add(HM,'v',q([880,22,1012,60]),f(S.diamond),2.8).style.justifyContent='flex-end';
  const acts=[()=>{close();window.kvaOpenBC&&kvaOpenBC(hkb==='anjing'?'dog':'cat');},()=>goPage('muhs'),()=>goPage('bcrk'),()=>goPage('bcar'),()=>goPage('bclt'),()=>goPage('bcup'),()=>goPage('bcgd'),()=>goPage('bcbr')];
  let k=0;T.t.forEach(y=>{for(let i=0;i<4;i++){const a=acts[k++];hs(HM,q([18+i*268,y,18+i*268+255,y+T.h]),a);}});
- const nav=[()=>close(),()=>openMail(),()=>kvaToast('Turnamen segera hadir'),()=>kvaToast('Peringkat segera hadir'),()=>kvaToast('Teman segera hadir'),()=>kvaToast('Pengaturan segera hadir')];
+ const nav=[()=>close(),()=>openMail(),()=>openRank('hadiah'),()=>openRank('power'),()=>kvaToast('Teman segera hadir'),()=>kvaToast('Pengaturan segera hadir')];
  nav.forEach((fn,i)=>{if(i)hs(HM,q([15+i*175,T.n,15+i*175+170,T.n+130]),fn);});
  {const A=hkb==='anjing',R=A?[12,1254,239,1426]:[12,1262,236,1436],tile=A?[15,1278,235,1422]:[15,1290,232,1432],bg=A?'linear-gradient(#e8333b,#8e0d14)':'linear-gradient(#3d7cf0,#123a8e)';
   const W2=A?1087:1086,H2=A?1447:1448,cov=document.createElement('div');Object.assign(cov.style,{position:'absolute',left:R[0]/W2*100+'%',top:R[1]/H2*100+'%',width:(R[2]-R[0])/W2*100+'%',height:(R[3]-R[1])/H2*100+'%',backgroundImage:'url(home_'+hkb+'.jpg?v=61)',backgroundSize:(W2/(R[2]-R[0])*100)+'% '+(H2/(R[3]-R[1])*100)+'%',backgroundPosition:((R[0]+430)/(W2-(R[2]-R[0]))*100)+'% '+(R[1]/(H2-(R[3]-R[1]))*100)+'%',pointerEvents:'none'});HM.H.appendChild(cov);
@@ -873,7 +873,7 @@ function renderProf(P){P=P||{};PF.H.innerHTML='';const q=r=>pc(r,1672,941);
  hs(PF,q([1488,292,1588,374]),()=>editName());
  hs(PF,q([1496,398,1584,478]),()=>{try{navigator.clipboard.writeText(P.kode||'');kvaToast('ID '+(P.kode||'')+' disalin');}catch(e){kvaToast(P.kode||'');}});
  hs(PF,q([165,545,478,628]),()=>openShop());hs(PF,q([420,238,515,322]),()=>openShop());hs(PF,q(hkb==='anjing'?[1240,750,1352,862]:[1222,752,1336,866]),()=>openShop());{const ids=[null].concat((shopData&&shopData.item||[]).filter(i=>i.milik).map(i=>i.id));const cyc=d=>{let k=ids.indexOf(P.profil_aktif||null);k=(k+d+ids.length)%ids.length;pakaiProfil(ids[k]);};hs(PF,q([55,360,150,470]),()=>cyc(-1));hs(PF,q([490,360,585,470]),()=>cyc(1));}
- hs(PF,q([150,640,500,800]),()=>kvaToast('Halaman Ranking segera hadir'));
+ hs(PF,q([150,640,500,800]),()=>openRank('power'));hs(PF,q([600,500,1040,600]),()=>openRank('detail'));
  const x=add(PF,'v',q([1590,180,1662,252]),'✕',3.4);Object.assign(x.style,{justifyContent:'center',borderRadius:'50%',background:'radial-gradient(circle at 35% 30%,#ff7a6a,#e01b1b 60%,#9b0f0f)',border:'.35cqw solid #fff',pointerEvents:'auto',cursor:'pointer'});x.onclick=()=>PF.classList.remove('on');}
 
 /* ---- TOKO PROFIL & KOLEKSI ---- */
@@ -913,6 +913,37 @@ function confirmBuy(i){const d=document.createElement('div');d.style.cssText='po
  d.querySelector('[data-b="1"]').onclick=async()=>{try{shopData=await kvaRpc('kva_beli_profil',{p_token:tok(),p_item:i.id});d.remove();renderShop();kvaToast('Berhasil dibeli! Tap lagi untuk memakai');syncProf();}catch(e){kvaToast(e.message);}};}
 async function pakaiProfil(id){try{shopData=await kvaRpc('kva_pakai_profil',{p_token:tok(),p_item:id});renderShop();kvaToast(id?'Profil dipakai':'Profil dilepas');syncProf();}catch(e){kvaToast(e.message);}}
 async function syncProf(){try{const j=await kvaRpc('kva_profil',{p_token:tok()});window.KVA_P=j;if(PF.classList.contains('on'))renderProf(j);if(HM.classList.contains('on'))renderHome();}catch(e){}}
+
+/* ---- RANKING ---- */
+const st3=document.createElement('style');st3.textContent=`#kvrank{position:fixed;inset:0;z-index:69;background:rgba(6,9,22,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;font-family:"Lilita One","Baloo 2",system-ui,sans-serif}#kvrank.on{display:flex}
+#kvrb{position:relative;width:min(97vw,620px);max-height:calc(100% - 16px);overflow:auto;background:linear-gradient(#1b2a6b,#0c1240);border:5px solid #f4c64a;border-radius:22px;box-shadow:0 0 0 3px #8a5a10,0 0 24px rgba(255,200,80,.5);color:#fff;container-type:inline-size}
+#kvrb .hd{position:relative}#kvrb .hd img{width:100%;display:block}#kvrb .hd i{position:absolute;top:0;width:9%;height:40%;cursor:pointer}
+#kvrb .tabs{display:flex;gap:1cqw;padding:1.4cqw}#kvrb .tabs b{flex:1;text-align:center;padding:1.6cqw .4cqw;border-radius:2cqw;font-weight:400;font-size:3cqw;cursor:pointer;border:.4cqw solid rgba(255,255,255,.6);white-space:nowrap;min-width:0;overflow:hidden}
+#kvrb .cols{display:flex;gap:1.4cqw;padding:0 1.4cqw}#kvrb .col{flex:1;border-radius:2.4cqw;border:.6cqw solid #f4c64a;padding:1cqw;min-width:0}#kvrb .col.a{background:linear-gradient(#8e1018,#4a070c)}#kvrb .col.k{background:linear-gradient(#1d3f9e,#0e1e5a)}
+#kvrb .ch{text-align:center;font-size:3.6cqw;margin:.6cqw 0 1cqw}#kvrb .row{display:flex;align-items:center;gap:1cqw;background:rgba(0,0,0,.25);border-radius:1.6cqw;padding:.8cqw;margin-top:.8cqw}
+#kvrb .n{width:5.5cqw;height:5.5cqw;border-radius:50%;display:grid;place-items:center;font-size:2.8cqw;flex:none;background:#2a2f52}#kvrb .n.g1{background:radial-gradient(#ffe27a,#c98a12);color:#3a2200}#kvrb .n.g2{background:radial-gradient(#eef,#8a94b0);color:#222}#kvrb .n.g3{background:radial-gradient(#ffb070,#a0521a)}
+#kvrb .av{width:7cqw;height:7cqw;border-radius:50%;border:.4cqw solid #f4c64a;background:#333 center/cover;flex:none}#kvrb .nm{flex:1;min-width:0;line-height:1.1}#kvrb .nm b{display:block;font-weight:400;font-size:2.8cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#kvrb .pg{display:inline-block;font-size:2cqw;padding:0 1.2cqw;border-radius:99px;border:.25cqw solid #ffd84a}
+#kvrb .pw{text-align:right;font-size:2.7cqw;color:#ffe14a;white-space:nowrap}#kvrb .pw small{display:block;color:#fff;font-size:2.2cqw}
+#kvrb .one .row .nm b{font-size:3.6cqw}#kvrb .one .pw{font-size:3.4cqw}#kvrb .one .pg{font-size:2.6cqw}
+#kvrb .tot{display:flex;gap:1.4cqw;padding:1.4cqw}#kvrb .tot div{flex:1;text-align:center;border-radius:2.4cqw;border:.6cqw solid #f4c64a;padding:1.2cqw;font-size:2.6cqw}#kvrb .tot b{display:block;font-weight:400;font-size:4.6cqw;color:#ffe14a}
+#kvrb .pic{padding:0 1.4cqw 1.4cqw}#kvrb .pic img{width:100%;max-height:calc(100vh - 62cqw);object-fit:contain;display:block;border-radius:2cqw}#kvrb .me{outline:.5cqw solid #7dff6a}`;document.head.appendChild(st3);
+const RK=document.createElement('div');RK.id='kvrank';RK.innerHTML='<div id="kvrb"></div>';document.body.appendChild(RK);RK.onclick=e=>{if(e.target===RK)RK.classList.remove('on');};
+let rkData=null,rkTab='power';
+async function openRank(tab){rkTab=tab||'power';RK.classList.add('on');renderRank();try{rkData=await kvaRpc('kva_ranking',{});renderRank();}catch(e){kvaToast(e.message);}}
+window.kvaOpenRank=openRank;
+function renderRank(){const B=RK.querySelector('#kvrb'),D=rkData||{kucing:[],anjing:[],total:{}},me=(window.KVA_P||{}).kode;
+ const row=r=>`<div class="row ${r.kode===me?'me':''}"><div class="n ${r.rk<=3?'g'+r.rk:''}">${r.rk}</div><div class="av" style="background-image:url(${kvaHead(r.profil)||(r.kode&&r.kode[0]==='D'?'pf/a_c06.jpg?v=69':'pf/k_x00.jpg?v=69')})"></div><div class="nm"><b>${r.nama}</b><span class="pg" style="background:${PCOL[r.pangkat.no]}">${r.pangkat.nama}</span></div><div class="pw">⚔ ${f(r.power)}<small>🐾 ${f(r.jml)}</small></div></div>`;
+ const col=(k,lim)=>`<div class="col ${k[0]}"><div class="ch">🐾 Pasukan ${k==='anjing'?'Anjing':'Kucing'}</div>${(D[k]||[]).slice(0,lim).map(row).join('')||'<div style="text-align:center;padding:4cqw;font-size:3cqw">Belum ada</div>'}</div>`;
+ const tabs=[['power','📊 Power','linear-gradient(#ffe27a,#f2b31d)'],['anjing','🐶 Anjing','linear-gradient(#e8333b,#8e0d14)'],['kucing','🐱 Kucing','linear-gradient(#3d7cf0,#123a8e)'],['hadiah','🎁 Hadiah','linear-gradient(#3d7cf0,#123a8e)'],['detail','👑 Detail/Rank','linear-gradient(#a05cff,#5a2bd0)']];
+ let body='';
+ if(rkTab==='power')body=`<div class="cols">${col('anjing',10)}${col('kucing',10)}</div>`;
+ else if(rkTab==='anjing'||rkTab==='kucing')body=`<div class="cols one">${col(rkTab,100)}</div>`;
+ else body=`<div class="pic"><img src="${rkTab==='hadiah'?'rk_hadiah.jpg?v=70':'rk_detail.jpg?v=70'}"></div>`;
+ B.innerHTML=`<div class="hd"><img src="rk_head.jpg?v=70"><i style="left:0" data-x="detail"></i><i style="right:0" data-x="close"></i></div>
+ <div class="tabs">${tabs.map(([k,l,bg])=>`<b data-t="${k}" style="background:${bg};${rkTab===k?'outline:.6cqw solid #fff;color:'+(k==='power'?'#3a2200':'#fff'):'opacity:.85;color:'+(k==='power'?'#3a2200':'#fff')}">${l}</b>`).join('')}</div>${body}
+ ${rkTab==='hadiah'||rkTab==='detail'?'':`<div class="tot"><div style="background:linear-gradient(#c0261f,#7a0c12)">Total Power Pasukan Anjing<b>${f((D.total||{}).anjing)}</b></div><div style="background:linear-gradient(#2766d0,#123a8e)">Total Power Pasukan Kucing<b>${f((D.total||{}).kucing)}</b></div></div>`}`;
+ B.querySelectorAll('[data-t]').forEach(e=>e.onclick=()=>{rkTab=e.dataset.t;renderRank();});
+ B.querySelector('[data-x="close"]').onclick=()=>RK.classList.remove('on');B.querySelector('[data-x="detail"]').onclick=()=>{rkTab='detail';renderRank();};}
 function editName(){const P=window.KVA_P||{};const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:90;background:rgba(5,8,20,.75);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui';
  d.innerHTML='<div style="width:100%;max-width:340px;background:linear-gradient(#24305e,#151b38);border:4px solid #f4c64a;border-radius:18px;padding:16px;color:#fff;text-align:center"><b style="font-size:19px;color:#f6c445">Ganti Nama Profil</b><div style="font-size:12px;color:#cfd6f5;margin:6px 0">Nama ini hanya tampil di profil. Login tetap pakai nama daftar: <b>'+(P.nama_login||'')+'</b></div><input maxlength="16" style="width:100%;box-sizing:border-box;font:700 17px system-ui;padding:10px;border-radius:10px;border:2px solid #f4c64a;background:#fff8e6"><div style="display:flex;gap:8px;margin-top:12px"><button data-b="0" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #888;background:#2a2f52;color:#fff">Batal</button><button data-b="1" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #fff3b0;background:linear-gradient(#ffe27a,#f2b31d);color:#3a2200">Simpan</button></div></div>';
  document.body.appendChild(d);const inp=d.querySelector('input');inp.value=P.nama||'';inp.focus();
