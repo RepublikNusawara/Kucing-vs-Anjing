@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 67 · 23 Nov 14:05</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 68 · 23 Nov 15:25</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -835,7 +835,7 @@ const TILE={kucing:{t:[725,990],n:1295,h:240},anjing:{t:[705,965],n:1280,h:240}}
 function goPage(id){const bci=document.getElementById('bci');bci.setAttribute('src',(hkb==='anjing'?'bcp_anjing.jpg':'bcp_kucing.jpg')+'?v=13');const e=document.getElementById(id);if(e)e.click();}
 function renderHome(){const S=window.KVA_S||{},T=TILE[hkb],WW=hkb==='anjing'?1087:1086,HH=hkb==='anjing'?1447:1448;HM.I.src='home_'+hkb+'.jpg?v=61';HM.H.innerHTML='';
  const q=r=>pc(r,WW,HH);
- add(HM,'v',q([142,16,335,54]),S.nama||'',3.2);add(HM,'v',q([142,56,320,84]),'ID : '+(hkb==='anjing'?'DW':'CW')+String(parseInt(String(S.id||'0').replace(/[^0-9]/g,'').slice(0,6)||'0')).padStart(6,'0'),2).style.color='#ffd23f';
+ const PFd=window.KVA_P||{};add(HM,'v',q([142,16,335,54]),PFd.nama||S.nama||'',3.2);add(HM,'v',q([142,56,320,84]),'ID : '+(PFd.kode||'-'),2).style.color='#ffd23f';hs(HM,q([8,6,345,92]),()=>openProf());
  add(HM,'v',q([594,22,722,60]),f(S.pet_coin),2.8);add(HM,'v',q([880,22,1012,60]),f(S.diamond),2.8).style.justifyContent='flex-end';
  const acts=[()=>{close();window.kvaOpenBC&&kvaOpenBC(hkb==='anjing'?'dog':'cat');},()=>goPage('muhs'),()=>goPage('bcrk'),()=>goPage('bcar'),()=>goPage('bclt'),()=>goPage('bcup'),()=>goPage('bcgd'),()=>goPage('bcbr')];
  let k=0;T.t.forEach(y=>{for(let i=0;i<4;i++){const a=acts[k++];hs(HM,q([18+i*268,y,18+i*268+255,y+T.h]),a);}});
@@ -847,9 +847,33 @@ function renderHome(){const S=window.KVA_S||{},T=TILE[hkb],WW=hkb==='anjing'?108
   t.innerHTML='<svg viewBox="0 0 64 52" style="width:46%;filter:drop-shadow(0 .4cqw .3cqw rgba(0,0,0,.6))"><path d="M4 10 22 4 42 10 60 4v38l-18 6-20-6-18 6z" fill="#f3d27a" stroke="#7a4a12" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 4v38M42 10v38" stroke="#7a4a12" stroke-width="2"/><path d="M8 34c6-4 10 2 16-2s10-8 16-4 10 2 14-2" fill="none" stroke="#3a8fd8" stroke-width="2.4"/><path d="M10 18h6M28 22h6M46 18h6" stroke="#5aa04a" stroke-width="3" stroke-linecap="round"/><path d="M44 6c-5 0-8 4-8 8 0 6 8 13 8 13s8-7 8-13c0-4-3-8-8-8z" fill="#e0262b" stroke="#fff" stroke-width="2"/><circle cx="44" cy="14" r="3" fill="#fff"/></svg><b style="color:#fff3c4;font:900 4.4cqw system-ui,sans-serif;-webkit-text-stroke:.25cqw #3a1d00;paint-order:stroke;text-shadow:0 .4cqw .3cqw rgba(0,0,0,.6)">Peta</b>';
   t.onclick=()=>{close();const b=document.getElementById('bcp');if(b&&b.classList.contains('on')){const x=document.getElementById('bcx');if(x)x.click();}};HM.H.appendChild(t);}
  if(unclaimed(S))add(HM,'kvx',q([340,T.n+8,392,T.n+60]),'!');}
-function openHome(){hkb=kub();renderHome();fit(HM,1086/1448);HM.classList.add('on');window.KVA_WELCOME_ON=true;refresh().then(()=>{if(HM.classList.contains('on'))renderHome();});}
+function openHome(){hkb=kub();renderHome();fit(HM,1086/1448);HM.classList.add('on');window.KVA_WELCOME_ON=true;refresh().then(()=>{if(HM.classList.contains('on'))renderHome();});{const t=tok();if(t)kvaRpc('kva_profil',{p_token:t}).then(j=>{window.KVA_P=j;if(HM.classList.contains('on'))renderHome();}).catch(()=>{});}}
 function close(){HM.classList.remove('on');window.KVA_WELCOME_ON=false;}
-window.kvaOpenHome=openHome;{const bh=document.getElementById('bchome');if(bh)bh.onclick=()=>openHome();}
+window.kvaOpenHome=openHome;
+/* ---- PROFIL / KARTU IDENTITAS ---- */
+const PF=mk('kvprof',66);PF.onclick=e=>{if(e.target===PF)PF.classList.remove('on');};
+const PCOL={1:'#a0521a',2:'#6c7896',3:'#259a2e',4:'#2766d0',5:'#7438bf',6:'#c0247a',7:'#139a9a',8:'#4436b8',9:'#c0261f',10:'#d99a00'};
+async function openProf(){const t=tok();if(!t){kvaToast('Masuk dulu');return;}PF.I.src='pf_'+hkb+'.jpg?v=68';fit(PF,1672/941);PF.classList.add('on');renderProf(window.KVA_P);try{const j=await kvaRpc('kva_profil',{p_token:t});window.KVA_P=j;renderProf(j);}catch(e){kvaToast(e.message);}}
+window.kvaOpenProf=openProf;
+function renderProf(P){P=P||{};PF.H.innerHTML='';const q=r=>pc(r,1672,941);
+ const box=(r,html,fs,col)=>{const e=add(PF,'v',q(r),html,fs);Object.assign(e.style,{justifyContent:'center',background:'linear-gradient(#0e1c50,#0a1238)',borderRadius:'1.4cqw',color:col||'#fff'});return e;};
+ box([1040,297,1486,370],P.nama||'-',3.2);box([1040,402,1490,474],P.kode||'-',3.2);
+ const pg=P.pangkat||{no:1,nama:'Rekrut'},rp=add(PF,'v',q([1206,512,1552,586]),pg.nama,3.1);Object.assign(rp.style,{justifyContent:'center',background:'linear-gradient('+PCOL[pg.no]+',rgba(0,0,0,.35))',backgroundColor:PCOL[pg.no],borderRadius:'99px',border:'.3cqw solid #ffd84a'});
+ box([1040,621,1592,700],f(P.power),4.4,'#ffe14a');
+ const rk=add(PF,'v',q([272,690,372,770]),P.ranking||'-',5.6);Object.assign(rk.style,{justifyContent:'center',color:'#ffe14a',background:'radial-gradient(#c8161f,#8e0d14 70%)',borderRadius:'40%'});
+ const SL=hkb==='anjing'?[[497,750,615,862],[633,750,738,862],[752,750,857,862],[871,750,979,862],[993,750,1100,862],[1116,750,1222,862]]:[[522,752,655,866],[669,752,790,866],[806,752,925,866],[945,752,1065,866],[1086,752,1205,866]];
+ SL.slice(1).forEach(r=>{const e=add(PF,'v',q(r),'',1);Object.assign(e.style,{background:'radial-gradient(#22306a,#10163a)',border:'.3cqw solid #c9a23a',borderRadius:'1.2cqw',boxSizing:'border-box'});});
+ hs(PF,q([1488,292,1588,374]),()=>editName());
+ hs(PF,q([1496,398,1584,478]),()=>{try{navigator.clipboard.writeText(P.kode||'');kvaToast('ID '+(P.kode||'')+' disalin');}catch(e){kvaToast(P.kode||'');}});
+ hs(PF,q([165,545,478,628]),()=>kvaToast('Toko profil segera hadir'));hs(PF,q([420,238,515,322]),()=>kvaToast('Toko profil segera hadir'));
+ hs(PF,q([150,640,500,800]),()=>kvaToast('Halaman Ranking segera hadir'));
+ const x=add(PF,'v',q([1590,180,1662,252]),'✕',3.4);Object.assign(x.style,{justifyContent:'center',borderRadius:'50%',background:'radial-gradient(circle at 35% 30%,#ff7a6a,#e01b1b 60%,#9b0f0f)',border:'.35cqw solid #fff',pointerEvents:'auto',cursor:'pointer'});x.onclick=()=>PF.classList.remove('on');}
+function editName(){const P=window.KVA_P||{};const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:90;background:rgba(5,8,20,.75);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui';
+ d.innerHTML='<div style="width:100%;max-width:340px;background:linear-gradient(#24305e,#151b38);border:4px solid #f4c64a;border-radius:18px;padding:16px;color:#fff;text-align:center"><b style="font-size:19px;color:#f6c445">Ganti Nama Profil</b><div style="font-size:12px;color:#cfd6f5;margin:6px 0">Nama ini hanya tampil di profil. Login tetap pakai nama daftar: <b>'+(P.nama_login||'')+'</b></div><input maxlength="16" style="width:100%;box-sizing:border-box;font:700 17px system-ui;padding:10px;border-radius:10px;border:2px solid #f4c64a;background:#fff8e6"><div style="display:flex;gap:8px;margin-top:12px"><button data-b="0" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #888;background:#2a2f52;color:#fff">Batal</button><button data-b="1" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #fff3b0;background:linear-gradient(#ffe27a,#f2b31d);color:#3a2200">Simpan</button></div></div>';
+ document.body.appendChild(d);const inp=d.querySelector('input');inp.value=P.nama||'';inp.focus();
+ d.querySelector('[data-b="0"]').onclick=()=>d.remove();
+ d.querySelector('[data-b="1"]').onclick=async()=>{try{const j=await kvaRpc('kva_ganti_nama',{p_token:tok(),p_nama:inp.value});window.KVA_P=j;renderProf(j);if(HM.classList.contains('on'))renderHome();d.remove();kvaToast('Nama profil diganti');}catch(e){kvaToast(e.message);}};}
+{const bh=document.getElementById('bchome');if(bh)bh.onclick=()=>openHome();}
 /* ---- MAIL ---- */
 const ML=mk('kvmail',66);let sel=0,busy=false;
 const TXT=[null,null,['Pengumuman Persiapan Perang!','Prajurit, perang besar Kucing vs Anjing akan segera dimulai!','Rekrut pasukan, latih kekuatan, dan upgrade senjata. Power kubumu menentukan siapa yang menang.','Pantau terus bar Duel Pertarungan di peta utama.'],
