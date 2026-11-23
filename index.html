@@ -14,7 +14,7 @@ html,body{margin:0;height:100%;background:#0e1124;font-family:system-ui,-apple-s
 </head><body>
 <div id="wrap"></div>
 <div id="ttl">PETA PERANG KUCING VS ANJING</div>
-<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 68 · 23 Nov 15:25</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
+<div id="ver" style="position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:30;font:600 11px system-ui;color:#fff;background:#000;padding:2px 8px;border-radius:8px;pointer-events:none">versi 69 · 23 Nov 15:45</div><div id="hint">1 jari: geser peta · 2 jari: cubit zoom & putar</div>
 <div id="bar">
 <button data-v="depan" class="on">Depan</button><button data-v="jam3">Jam 3</button><button data-v="jam9">Jam 9</button><button data-v="belakang">Belakang</button><button data-v="atas">Atas</button><button id="sorot">Sorot Pasukan</button><button id="auto">Putar otomatis</button><button id="waktu">Waktu: Jam asli</button>
 </div>
@@ -835,7 +835,7 @@ const TILE={kucing:{t:[725,990],n:1295,h:240},anjing:{t:[705,965],n:1280,h:240}}
 function goPage(id){const bci=document.getElementById('bci');bci.setAttribute('src',(hkb==='anjing'?'bcp_anjing.jpg':'bcp_kucing.jpg')+'?v=13');const e=document.getElementById(id);if(e)e.click();}
 function renderHome(){const S=window.KVA_S||{},T=TILE[hkb],WW=hkb==='anjing'?1087:1086,HH=hkb==='anjing'?1447:1448;HM.I.src='home_'+hkb+'.jpg?v=61';HM.H.innerHTML='';
  const q=r=>pc(r,WW,HH);
- const PFd=window.KVA_P||{};add(HM,'v',q([142,16,335,54]),PFd.nama||S.nama||'',3.2);add(HM,'v',q([142,56,320,84]),'ID : '+(PFd.kode||'-'),2).style.color='#ffd23f';hs(HM,q([8,6,345,92]),()=>openProf());
+ const PFd=window.KVA_P||{};add(HM,'v',q([142,16,335,54]),PFd.nama||S.nama||'',3.2);add(HM,'v',q([142,56,320,84]),'ID : '+(PFd.kode||'-'),2).style.color='#ffd23f';if(PFd.profil_aktif){const av=add(HM,'v',q([27,18,110,96]),'',1);Object.assign(av.style,{background:'url('+kvaHead(PFd.profil_aktif)+') center/cover',borderRadius:'1.4cqw'});}hs(HM,q([8,6,345,92]),()=>openProf());
  add(HM,'v',q([594,22,722,60]),f(S.pet_coin),2.8);add(HM,'v',q([880,22,1012,60]),f(S.diamond),2.8).style.justifyContent='flex-end';
  const acts=[()=>{close();window.kvaOpenBC&&kvaOpenBC(hkb==='anjing'?'dog':'cat');},()=>goPage('muhs'),()=>goPage('bcrk'),()=>goPage('bcar'),()=>goPage('bclt'),()=>goPage('bcup'),()=>goPage('bcgd'),()=>goPage('bcbr')];
  let k=0;T.t.forEach(y=>{for(let i=0;i<4;i++){const a=acts[k++];hs(HM,q([18+i*268,y,18+i*268+255,y+T.h]),a);}});
@@ -862,12 +862,57 @@ function renderProf(P){P=P||{};PF.H.innerHTML='';const q=r=>pc(r,1672,941);
  box([1040,621,1592,700],f(P.power),4.4,'#ffe14a');
  const rk=add(PF,'v',q([272,690,372,770]),P.ranking||'-',5.6);Object.assign(rk.style,{justifyContent:'center',color:'#ffe14a',background:'radial-gradient(#c8161f,#8e0d14 70%)',borderRadius:'40%'});
  const SL=hkb==='anjing'?[[497,750,615,862],[633,750,738,862],[752,750,857,862],[871,750,979,862],[993,750,1100,862],[1116,750,1222,862]]:[[522,752,655,866],[669,752,790,866],[806,752,925,866],[945,752,1065,866],[1086,752,1205,866]];
- SL.slice(1).forEach(r=>{const e=add(PF,'v',q(r),'',1);Object.assign(e.style,{background:'radial-gradient(#22306a,#10163a)',border:'.3cqw solid #c9a23a',borderRadius:'1.2cqw',boxSizing:'border-box'});});
+ const own=(shopData&&shopData.item||[]).filter(i=>i.milik).sort((a,b)=>String(a.dibeli).localeCompare(String(b.dibeli)));
+ if(P.profil_aktif){const av=add(PF,'v',q([186,236,452,502]),'',1);Object.assign(av.style,{borderRadius:'50%',background:'url('+kvaHead(P.profil_aktif)+') center/cover',boxShadow:'0 0 2cqw rgba(255,210,80,.7)'});}
+ SL.forEach((r,k)=>{const it=k===0?null:own[k-1];const e=add(PF,'v',q(r),'',1);Object.assign(e.style,{background:k===0?(P.profil_aktif?'url('+(hkb==='anjing'?'pf/a_c06.jpg?v=69':'pf/k_x00.jpg?v=69')+') center/cover':'transparent'):(it?'url('+kvaHead(it.id)+') center/cover':'radial-gradient(#22306a,#10163a)'),border:k===0?'none':'.3cqw solid #c9a23a',borderRadius:'1.2cqw',boxSizing:'border-box',pointerEvents:'auto',cursor:'pointer'});
+  if(k===0&&P.profil_aktif)e.style.border='.3cqw solid #c9a23a';
+  const act=k===0?!P.profil_aktif:(it&&P.profil_aktif===it.id);if(act&&(k>0||P.profil_aktif)){e.innerHTML='<span style="position:absolute;right:-6%;bottom:-8%;width:34%;aspect-ratio:1;border-radius:50%;background:#1fae3c;border:.25cqw solid #fff;display:flex;align-items:center;justify-content:center;font-size:2cqw;color:#fff">✔</span>';}
+  if(k>0&&!P.profil_aktif)null;
+  e.onclick=()=>{if(k===0)pakaiProfil(null);else if(it)pakaiProfil(it.id);else openShop();};});
+ if(!shopData)kvaRpc('kva_toko_profil',{p_token:tok()}).then(j=>{shopData=j;if(PF.classList.contains('on'))renderProf(window.KVA_P);}).catch(()=>{});
  hs(PF,q([1488,292,1588,374]),()=>editName());
  hs(PF,q([1496,398,1584,478]),()=>{try{navigator.clipboard.writeText(P.kode||'');kvaToast('ID '+(P.kode||'')+' disalin');}catch(e){kvaToast(P.kode||'');}});
- hs(PF,q([165,545,478,628]),()=>kvaToast('Toko profil segera hadir'));hs(PF,q([420,238,515,322]),()=>kvaToast('Toko profil segera hadir'));
+ hs(PF,q([165,545,478,628]),()=>openShop());hs(PF,q([420,238,515,322]),()=>openShop());hs(PF,q(hkb==='anjing'?[1240,750,1352,862]:[1222,752,1336,866]),()=>openShop());{const ids=[null].concat((shopData&&shopData.item||[]).filter(i=>i.milik).map(i=>i.id));const cyc=d=>{let k=ids.indexOf(P.profil_aktif||null);k=(k+d+ids.length)%ids.length;pakaiProfil(ids[k]);};hs(PF,q([55,360,150,470]),()=>cyc(-1));hs(PF,q([490,360,585,470]),()=>cyc(1));}
  hs(PF,q([150,640,500,800]),()=>kvaToast('Halaman Ranking segera hadir'));
  const x=add(PF,'v',q([1590,180,1662,252]),'✕',3.4);Object.assign(x.style,{justifyContent:'center',borderRadius:'50%',background:'radial-gradient(circle at 35% 30%,#ff7a6a,#e01b1b 60%,#9b0f0f)',border:'.35cqw solid #fff',pointerEvents:'auto',cursor:'pointer'});x.onclick=()=>PF.classList.remove('on');}
+
+/* ---- TOKO PROFIL & KOLEKSI ---- */
+window.kvaHead=(id)=>id?('pf/'+id+'.jpg?v=69'):null;
+const st2=document.createElement('style');st2.textContent=`#kvshop{position:fixed;inset:0;z-index:68;background:rgba(6,9,22,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;font-family:"Lilita One","Baloo 2",system-ui,sans-serif}#kvshop.on{display:flex}
+#kvsb{position:relative;width:min(96vw,560px);max-height:calc(100% - 20px);overflow:auto;background:linear-gradient(#1b2a6b,#0c1240);border:5px solid #f4c64a;border-radius:22px;box-shadow:0 0 0 3px #8a5a10,0 0 24px rgba(255,200,80,.5);padding:10px 10px 12px;color:#fff;container-type:inline-size}
+#kvsb .top{display:flex;align-items:center;gap:8px}#kvsb .bk{width:42px;height:42px;border-radius:12px;background:linear-gradient(#9b6bff,#5a2bd0);border:3px solid #fff;font-size:22px;display:grid;place-items:center;cursor:pointer;flex:none}
+#kvsb .av{width:24cqw;height:24cqw;border-radius:50%;border:1cqw solid #f4c64a;box-shadow:0 0 12px rgba(255,200,80,.6);background:#2a2f52 center/cover;flex:none;margin-top:-4px}
+#kvsb .tt{flex:1;text-align:center}#kvsb .rb{display:inline-block;background:linear-gradient(#e8333b,#8e0d14);border:3px solid #ffd84a;border-radius:14px;padding:2px 14px;font-size:6.4cqw;color:#fff;text-shadow:0 2px 0 #5a0000}#kvsb .sub{font-size:3cqw;color:#ffd84a;letter-spacing:.06em}
+#kvsb .cur{display:flex;flex-direction:column;gap:4px;align-items:flex-end;font-size:3.6cqw}#kvsb .cur span{background:#0b1030;border:2px solid #3c4a8a;border-radius:99px;padding:2px 10px;white-space:nowrap}
+#kvsb h3{margin:8px 0 6px;text-align:center;font-size:4.6cqw;font-weight:400}#kvsb .tabs{display:flex;gap:5px}#kvsb .tabs b{flex:1;text-align:center;padding:6px 2px;border-radius:12px;border:2px solid #6c8cff;background:linear-gradient(#2a50c8,#152c80);font-size:3.6cqw;font-weight:400;cursor:pointer}#kvsb .tabs b.on{background:linear-gradient(#ffe27a,#f2b31d);color:#3a2200;border-color:#fff3b0}
+#kvsb .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}#kvsb .grid.k{grid-template-columns:repeat(4,1fr)}
+#kvsb .it{position:relative;border-radius:10px;border:2px solid #f4c64a;background:#141a44;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}#kvsb .it.dm{border-color:#c77dff;box-shadow:0 0 10px rgba(199,125,255,.6)}#kvsb .it img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+#kvsb .it .nm{position:absolute;left:4%;right:4%;top:66%;text-align:center;font-size:2.9cqw;white-space:nowrap;background:rgba(70,10,90,.85);border-radius:8px;border:1px solid #ffd84a}
+#kvsb .it .pr{text-align:center;font-size:2.7cqw;white-space:nowrap;padding:2px 1px;background:linear-gradient(#2a2f62,#121640)}#kvsb .it.own .pr{background:linear-gradient(#1f9a3c,#0e5a22)}
+#kvsb .it .ok{position:absolute;top:2px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#1fae3c;border:1px solid #fff;border-radius:99px;font-size:2.2cqw;padding:0 4px}
+#kvsb .inf{margin-top:9px;font-size:3.1cqw;font-family:system-ui;font-weight:600;background:#0b1030;border:2px solid #f4c64a;border-radius:12px;padding:7px 10px;color:#dfe6ff}`;document.head.appendChild(st2);
+const SH=document.createElement('div');SH.id='kvshop';SH.innerHTML='<div id="kvsb"></div>';document.body.appendChild(SH);SH.onclick=e=>{if(e.target===SH)SH.classList.remove('on');};
+let shopData=null,shopTab='semua';
+async function openShop(tab){shopTab=tab||'semua';SH.classList.add('on');renderShop();try{shopData=await kvaRpc('kva_toko_profil',{p_token:tok()});renderShop();}catch(e){kvaToast(e.message);}}
+window.kvaOpenShop=openShop;
+function renderShop(){const B=SH.querySelector('#kvsb'),A=hkb==='anjing',D=shopData||{item:[]},aktif=D.aktif;const nmK=A?'Anjing':'Kucing';
+ const list=D.item.filter(i=>shopTab==='semua'?i.jenis!=='khusus':i.jenis===shopTab);
+ const price=i=>(i.mata==='coin'?'🐾 P$ ':'💎 ')+f(i.harga);
+ B.innerHTML=`<div class="top"><div class="bk">⬅</div><div class="av" style="background-image:url(${kvaHead(aktif)||(A?'pf/a_c06.jpg?v=69':'pf/k_x00.jpg?v=69')})"></div><div class="tt"><div class="sub">ANJING VS KUCING</div><div class="rb">Profil ${nmK}</div></div><div class="cur"><span>🐾 P$ ${f(D.pet_coin)}</span><span>💎 ${f(D.diamond)}</span></div></div>
+ <h3>🐾 Pilih Profil Kepala ${nmK} 🐾</h3><div class="tabs">${[['semua','▦ Semua'],['coin','🐾 Coin'],['diamond','💎 Diamond'],['khusus','👑 Khusus']].map(([k,l])=>`<b data-t="${k}" class="${shopTab===k?'on':''}">${l}</b>`).join('')}</div>
+ <div class="grid ${shopTab==='khusus'?'k':''}">${list.map(i=>`<div class="it ${i.mata==='diamond'?'dm':''} ${i.milik?'own':''}" data-id="${i.id}"><img src="${kvaHead(i.id)}" loading="lazy">${i.jenis==='khusus'?`<div class="nm">${i.nama}</div>`:''}${i.milik?`<div class="ok">${aktif===i.id?'✔ Dipakai':'Dimiliki'}</div>`:''}<div class="pr">${i.milik?(aktif===i.id?'Lepas':'Pakai'):price(i)}</div></div>`).join('')||'<div style="grid-column:1/-1;text-align:center;padding:20px">Memuat…</div>'}</div>
+ <div class="inf">ℹ️ ${shopTab==='khusus'?'Profil Khusus adalah koleksi eksklusif dengan desain paling langka dan tampilan premium.':'Profil Diamond adalah edisi eksklusif dengan desain premium dan tampilan lebih langka.'}</div>`;
+ B.querySelector('.bk').onclick=()=>SH.classList.remove('on');
+ B.querySelectorAll('[data-t]').forEach(e=>e.onclick=()=>{shopTab=e.dataset.t;renderShop();});
+ B.querySelectorAll('.it').forEach(e=>e.onclick=()=>{const i=D.item.find(x=>x.id===e.dataset.id);if(!i)return;
+   if(i.milik){pakaiProfil(aktif===i.id?null:i.id);return;}
+   confirmBuy(i);});}
+function confirmBuy(i){const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:95;background:rgba(5,8,20,.75);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui';
+ d.innerHTML=`<div style="width:100%;max-width:320px;background:linear-gradient(#24305e,#151b38);border:4px solid #f4c64a;border-radius:18px;padding:14px;color:#fff;text-align:center"><img src="${kvaHead(i.id)}" style="width:110px;height:110px;border-radius:50%;border:4px solid #f4c64a;object-fit:cover"><div style="font:800 18px system-ui;margin:8px 0 2px">${i.nama}</div><div style="font-size:14px;color:#ffd84a">Harga: ${i.mata==='coin'?'P$ ':'💎 '}${f(i.harga)}</div><div style="display:flex;gap:8px;margin-top:12px"><button data-b="0" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #888;background:#2a2f52;color:#fff">Batal</button><button data-b="1" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #fff3b0;background:linear-gradient(#ffe27a,#f2b31d);color:#3a2200">Beli</button></div></div>`;
+ document.body.appendChild(d);d.querySelector('[data-b="0"]').onclick=()=>d.remove();
+ d.querySelector('[data-b="1"]').onclick=async()=>{try{shopData=await kvaRpc('kva_beli_profil',{p_token:tok(),p_item:i.id});d.remove();renderShop();kvaToast('Berhasil dibeli! Tap lagi untuk memakai');syncProf();}catch(e){kvaToast(e.message);}};}
+async function pakaiProfil(id){try{shopData=await kvaRpc('kva_pakai_profil',{p_token:tok(),p_item:id});renderShop();kvaToast(id?'Profil dipakai':'Profil dilepas');syncProf();}catch(e){kvaToast(e.message);}}
+async function syncProf(){try{const j=await kvaRpc('kva_profil',{p_token:tok()});window.KVA_P=j;if(PF.classList.contains('on'))renderProf(j);if(HM.classList.contains('on'))renderHome();}catch(e){}}
 function editName(){const P=window.KVA_P||{};const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:90;background:rgba(5,8,20,.75);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui';
  d.innerHTML='<div style="width:100%;max-width:340px;background:linear-gradient(#24305e,#151b38);border:4px solid #f4c64a;border-radius:18px;padding:16px;color:#fff;text-align:center"><b style="font-size:19px;color:#f6c445">Ganti Nama Profil</b><div style="font-size:12px;color:#cfd6f5;margin:6px 0">Nama ini hanya tampil di profil. Login tetap pakai nama daftar: <b>'+(P.nama_login||'')+'</b></div><input maxlength="16" style="width:100%;box-sizing:border-box;font:700 17px system-ui;padding:10px;border-radius:10px;border:2px solid #f4c64a;background:#fff8e6"><div style="display:flex;gap:8px;margin-top:12px"><button data-b="0" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #888;background:#2a2f52;color:#fff">Batal</button><button data-b="1" style="flex:1;font:800 16px system-ui;padding:10px;border-radius:10px;border:2px solid #fff3b0;background:linear-gradient(#ffe27a,#f2b31d);color:#3a2200">Simpan</button></div></div>';
  document.body.appendChild(d);const inp=d.querySelector('input');inp.value=P.nama||'';inp.focus();
